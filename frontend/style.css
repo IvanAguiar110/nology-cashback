@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #101828, #1d2939);
+  color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  background: #ffffff;
+  color: #101828;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+h1, h2 {
+  margin-bottom: 8px;
+}
+
+.subtitulo {
+  color: #667085;
+  margin-bottom: 24px;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 8px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #155eef;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #004eeb;
+}
+
+.resultado {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 12px;
+  background: #ecfdf3;
+  color: #027a48;
+  border: 1px solid #abefc6;
+}
+
+.escondido {
+  display: none;
+}
+
+.historico {
+  display: grid;
+  gap: 12px;
+}
+
+.item-historico {
+  padding: 14px;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.item-historico strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.erro {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #fef3f2;
+  color: #b42318;
+  border: 1px solid #fecdca;
+}
