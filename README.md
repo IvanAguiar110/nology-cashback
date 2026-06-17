@@ -36,4 +36,4 @@ Projeto desenvolvido para o desafio de Estagiário de Dev da Nology.
 Crie o ambiente virtual:
 
 ```bash
-python3 -m venv venv
+python3 -m venv venv 
