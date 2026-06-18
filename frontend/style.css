@@ -109,3 +109,19 @@ button:hover {
   color: #b42318;
   border: 1px solid #fecdca;
 }
+
+.campo-percentual {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.campo-percentual input {
+  width: 100px;
+}
+
+.campo-percentual span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #344054;
+}

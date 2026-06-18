@@ -27,8 +27,23 @@
           min="0.01" 
           step="0.01" 
           required
-        >
 
+        > 
+        <label for="percentualDesconto">Percentual de desconto</label>
+
+<div class="campo-percentual">
+  <input 
+    type="number" 
+    id="percentualDesconto" 
+    placeholder="Ex: 15" 
+    min="0" 
+    max="100" 
+    step="1" 
+    value="0"
+    required
+  >
+  <span>%</span>
+</div>
         <button type="submit">Calcular cashback</button>
       </form>
 

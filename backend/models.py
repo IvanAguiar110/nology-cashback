@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime
-from datetime import datetime
+from datetime import datetime, timezone
 from backend.database import Base
 
 
@@ -8,9 +8,17 @@ class ConsultaCashback(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     ip_usuario = Column(String, index=True)
+
     cliente_vip = Column(Boolean)
     valor_compra = Column(Float)
+    percentual_desconto = Column(Float, default=0)
+    valor_final = Column(Float)
+
     cashback_base = Column(Float)
     bonus_vip = Column(Float)
     cashback_total = Column(Float)
-    criado_em = Column(DateTime, default=datetime.utcnow)
+
+    criado_em = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc)
+    )

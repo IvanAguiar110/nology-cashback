@@ -1,10 +1,15 @@
-const API_URL = "https://nology-cashback-api.onrender.com";
+const API_URL = 
+  window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000"
+    : "https://nology-cashback-api.onrender.com";
 
 const formCashback = document.getElementById("formCashback");
 const tipoCliente = document.getElementById("tipoCliente");
 const valorCompra = document.getElementById("valorCompra");
+const percentualDesconto = document.getElementById("percentualDesconto");
 const resultado = document.getElementById("resultado");
 const historico = document.getElementById("historico");
+const botaoCalcular = formCashback.querySelector("button");
 
 function formatarMoeda(valor) {
   return new Intl.NumberFormat("pt-BR", {
@@ -13,13 +18,29 @@ function formatarMoeda(valor) {
   }).format(valor);
 }
 
+function mostrarErro(mensagem) {
+  resultado.classList.remove("escondido");
+  resultado.classList.add("erro");
+  resultado.innerHTML = mensagem;
+}
+
+function limparErro() {
+  resultado.classList.remove("erro");
+}
+
 async function calcularCashback(event) {
   event.preventDefault();
 
+  limparErro();
+
   const dados = {
     valor_compra: Number(valorCompra.value),
+    percentual_desconto: Number(percentualDesconto.value),
     cliente_vip: tipoCliente.value === "true"
   };
+
+  botaoCalcular.disabled = true;
+  botaoCalcular.textContent = "Calculando...";
 
   try {
     const resposta = await fetch(`${API_URL}/calcular-cashback`, {
@@ -30,28 +51,42 @@ async function calcularCashback(event) {
       body: JSON.stringify(dados)
     });
 
+    if (!resposta.ok) {
+      throw new Error("Erro ao calcular cashback. Verifique os valores informados.");
+    }
+
     const calculo = await resposta.json();
 
     resultado.classList.remove("escondido");
     resultado.innerHTML = `
       <strong>Cashback final: ${formatarMoeda(calculo.cashback_total)}</strong>
+      <p>Valor original: ${formatarMoeda(calculo.valor_compra)}</p>
+      <p>Desconto aplicado: ${calculo.percentual_desconto}%</p>
+      <p>Valor final da compra: ${formatarMoeda(calculo.valor_final)}</p>
       <p>Cashback base: ${formatarMoeda(calculo.cashback_base)}</p>
       <p>Bônus VIP: ${formatarMoeda(calculo.bonus_vip)}</p>
     `;
 
     valorCompra.value = "";
+    percentualDesconto.value = "0";
 
     carregarHistorico();
   } catch (erro) {
-    resultado.classList.remove("escondido");
-    resultado.classList.add("erro");
-    resultado.innerHTML = "Erro ao calcular cashback. Verifique se a API está ligada.";
+    mostrarErro(erro.message);
+  } finally {
+    botaoCalcular.disabled = false;
+    botaoCalcular.textContent = "Calcular cashback";
   }
 }
 
 async function carregarHistorico() {
   try {
     const resposta = await fetch(`${API_URL}/historico`);
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao carregar histórico.");
+    }
+
     const consultas = await resposta.json();
 
     if (consultas.length === 0) {
@@ -65,7 +100,9 @@ async function carregarHistorico() {
       return `
         <div class="item-historico">
           <strong>${tipo}</strong>
-          <p>Valor da compra: ${formatarMoeda(consulta.valor_compra)}</p>
+          <p>Valor original: ${formatarMoeda(consulta.valor_compra)}</p>
+          <p>Desconto: ${consulta.percentual_desconto}%</p>
+          <p>Valor final: ${formatarMoeda(consulta.valor_final)}</p>
           <p>Cashback final: ${formatarMoeda(consulta.cashback_total)}</p>
           <p>Data: ${new Date(consulta.criado_em).toLocaleString("pt-BR")}</p>
         </div>
